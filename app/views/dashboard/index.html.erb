@@ -8,6 +8,16 @@
     <%= link_to "Quick Log", quick_log_path, style: "margin-left: 15px; font-weight: bold; color: green;" %>
   </nav>
 
+  <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 8px; margin-bottom: 30px;">
+    <h3 style="margin: 0 0 10px 0; color: #856404;">🚀 Live Apps</h3>
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+      <%= link_to "agent_tracker", "http://24.199.71.69/agent_tracker", target: "_blank", style: "padding: 8px 15px; background: #28a745; color: white; border-radius: 5px; text-decoration: none;" %>
+      <%= link_to "Chromatic (Game)", "http://24.199.71.69/chromatic", target: "_blank", style: "padding: 8px 15px; background: #007bff; color: white; border-radius: 5px; text-decoration: none;" %>
+      <%= link_to "Shopify Stockout Calc", "http://24.199.71.69/shopify_stockout_calc", target: "_blank", style: "padding: 8px 15px; background: #17a2b8; color: white; border-radius: 5px; text-decoration: none;" %>
+      <%= link_to "idea_tracker", "http://24.199.71.69/idea_tracker", target: "_blank", style: "padding: 8px 15px; background: #6c757d; color: white; border-radius: 5px; text-decoration: none;" %>
+    </div>
+  </div>
+
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
     <div style="background: #e3f2fd; padding: 20px; border-radius: 8px;">
       <div style="font-size: 2em; font-weight: bold; color: #1976d2;"><%= @total_agents %></div>
