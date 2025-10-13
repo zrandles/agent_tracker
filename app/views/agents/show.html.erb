@@ -1,0 +1,91 @@
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+  <h1 style="font-size: 2em; margin-bottom: 10px;"><%= @agent.name %> <span style="color: #999;">#<%= @agent.agent_number %></span></h1>
+
+  <%= link_to "← Back to Agents", agents_path, style: "margin-bottom: 20px; display: inline-block;" %>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px;">
+    <div style="background: #e3f2fd; padding: 15px; border-radius: 5px;">
+      <div><strong>Category:</strong></div>
+      <div><%= @agent.category.humanize %></div>
+    </div>
+    <div style="background: #f3e5f5; padding: 15px; border-radius: 5px;">
+      <div><strong>Tier:</strong></div>
+      <div><%= @agent.tier %></div>
+    </div>
+    <div style="background: #e8f5e9; padding: 15px; border-radius: 5px;">
+      <div><strong>Status:</strong></div>
+      <div><%= @agent.status.humanize %></div>
+    </div>
+    <div style="background: #fff3e0; padding: 15px; border-radius: 5px;">
+      <div><strong>Invocations:</strong></div>
+      <div><%= @total_invocations %></div>
+    </div>
+    <div style="background: #f1f8e9; padding: 15px; border-radius: 5px;">
+      <div><strong>Success Rate:</strong></div>
+      <div><%= @success_rate %>%</div>
+    </div>
+    <div style="background: #fce4ec; padding: 15px; border-radius: 5px;">
+      <div><strong>Open Issues:</strong></div>
+      <div><%= @open_issues %></div>
+    </div>
+  </div>
+
+  <div style="background: white; padding: 20px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px;">
+    <h2 style="margin-bottom: 15px;">Recent Invocations</h2>
+    <% if @invocations.any? %>
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr style="border-bottom: 2px solid #ddd;">
+            <th style="padding: 10px; text-align: left;">Task</th>
+            <th style="padding: 10px; text-align: center;">Started</th>
+            <th style="padding: 10px; text-align: center;">Duration</th>
+            <th style="padding: 10px; text-align: center;">Success</th>
+            <th style="padding: 10px; text-align: center;">Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @invocations.each do |inv| %>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 10px;">
+                <%= link_to truncate(inv.task_description, length: 80), agent_invocation_path(inv) %>
+              </td>
+              <td style="padding: 10px; text-align: center; font-size: 0.9em;">
+                <%= inv.started_at.strftime("%b %d, %H:%M") %>
+              </td>
+              <td style="padding: 10px; text-align: center; font-size: 0.9em;">
+                <%= inv.duration_display %>
+              </td>
+              <td style="padding: 10px; text-align: center;">
+                <span style="color: <%= inv.success ? 'green' : (inv.success == false ? 'red' : '#999') %>;">
+                  <%= inv.success ? '✓' : (inv.success == false ? '✗' : '—') %>
+                </span>
+              </td>
+              <td style="padding: 10px; text-align: center; font-size: 0.9em;">
+                <%= inv.rating_stars %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p style="color: #999;">No invocations yet.</p>
+    <% end %>
+  </div>
+
+  <% if @changes.any? %>
+    <div style="background: white; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+      <h2 style="margin-bottom: 15px;">Change History</h2>
+      <% @changes.each do |change| %>
+        <div style="border-left: 4px solid #2196f3; padding: 10px; margin-bottom: 15px; background: #f5f5f5;">
+          <div style="font-size: 0.9em; color: #666; margin-bottom: 5px;">
+            <%= change.created_at.strftime("%b %d, %Y at %H:%M") %> -
+            <span style="background: <%= change.change_type_badge_color %>; color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.85em;">
+              <%= change.change_type_label %>
+            </span>
+          </div>
+          <div><%= change.change_description %></div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

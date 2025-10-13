@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  agent: one
+  task_description: MyText
+  invocation_mode: MyString
+  context_notes: MyText
+  started_at: 2025-10-13 10:07:44
+  completed_at: 2025-10-13 10:07:44
+  duration_minutes: 1
+  success: false
+  satisfaction_rating: 1
+  outcome_notes: MyText
+  tokens_input: 1
+  tokens_output: 1
+  tokens_total: 1
+
+two:
+  agent: two
+  task_description: MyText
+  invocation_mode: MyString
+  context_notes: MyText
+  started_at: 2025-10-13 10:07:44
+  completed_at: 2025-10-13 10:07:44
+  duration_minutes: 1
+  success: false
+  satisfaction_rating: 1
+  outcome_notes: MyText
+  tokens_input: 1
+  tokens_output: 1
+  tokens_total: 1

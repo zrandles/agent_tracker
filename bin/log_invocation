@@ -1,0 +1,117 @@
+#!/usr/bin/env ruby
+require_relative "../config/environment"
+
+# CLI tool for quickly logging agent invocations
+# Usage: bin/log_invocation
+
+def prompt(message)
+  print "#{message}: "
+  gets.chomp
+end
+
+def select_agent
+  puts "\n=== Select Agent ==="
+  puts "Enter agent number (1-100) or search by name:"
+  input = gets.chomp
+
+  if input.match?(/^\d+$/)
+    agent = Agent.find_by(agent_number: input.to_i)
+  else
+    agents = Agent.where("name LIKE ?", "%#{input}%").limit(10)
+    if agents.count == 1
+      agent = agents.first
+    elsif agents.count > 1
+      puts "\nMultiple agents found:"
+      agents.each { |a| puts "  #{a.agent_number}. #{a.name}" }
+      print "Select agent number: "
+      agent = Agent.find_by(agent_number: gets.chomp.to_i)
+    end
+  end
+
+  agent
+end
+
+puts "=================="
+puts "Agent Invocation Logger"
+puts "=================="
+
+# Select agent
+agent = select_agent
+
+unless agent
+  puts "Agent not found!"
+  exit 1
+end
+
+puts "\nLogging invocation for: #{agent.name} (Agent ##{agent.agent_number})"
+
+# Collect invocation details
+task_description = prompt("\nTask description")
+
+puts "\nInvocation mode:"
+puts "  1. manual"
+puts "  2. subagent"
+mode_choice = prompt("Select mode (1 or 2)")
+invocation_mode = mode_choice == "2" ? "subagent" : "manual"
+
+started_at = Time.current
+puts "\nStarted at: #{started_at.strftime('%Y-%m-%d %H:%M:%S')}"
+
+context_notes = prompt("\nContext notes (optional)")
+
+# Ask if completed now
+print "\nIs this invocation complete now? (y/n): "
+is_complete = gets.chomp.downcase == 'y'
+
+completed_at = nil
+success = nil
+satisfaction_rating = nil
+outcome_notes = nil
+tokens_input = nil
+tokens_output = nil
+tokens_total = nil
+
+if is_complete
+  completed_at = Time.current
+
+  print "Was it successful? (y/n): "
+  success = gets.chomp.downcase == 'y'
+
+  satisfaction_rating = prompt("Satisfaction rating (1-5)")&.to_i
+  satisfaction_rating = nil if satisfaction_rating == 0
+
+  outcome_notes = prompt("Outcome notes (optional)")
+
+  tokens_input = prompt("Tokens input (optional)")&.to_i
+  tokens_output = prompt("Tokens output (optional)")&.to_i
+  if tokens_input && tokens_output
+    tokens_total = tokens_input + tokens_output
+  end
+end
+
+# Create the invocation
+invocation = AgentInvocation.create!(
+  agent: agent,
+  task_description: task_description,
+  invocation_mode: invocation_mode,
+  context_notes: context_notes.presence,
+  started_at: started_at,
+  completed_at: completed_at,
+  success: success,
+  satisfaction_rating: satisfaction_rating,
+  outcome_notes: outcome_notes.presence,
+  tokens_input: tokens_input,
+  tokens_output: tokens_output,
+  tokens_total: tokens_total
+)
+
+puts "\n✓ Invocation logged successfully!"
+puts "  ID: #{invocation.id}"
+puts "  Agent: #{agent.name}"
+puts "  Status: #{is_complete ? 'Completed' : 'In Progress'}"
+if is_complete
+  puts "  Duration: #{invocation.duration_display}"
+  puts "  Success: #{success ? 'Yes' : 'No'}"
+  puts "  Rating: #{invocation.rating_stars}" if satisfaction_rating
+end
+puts "\nView at: /agent_tracker/agent_invocations/#{invocation.id}"

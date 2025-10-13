@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  agent: one
+  improvement_description: MyText
+  priority: 1
+  status: MyString
+  implemented_at: 2025-10-13 10:07:53
+
+two:
+  agent: two
+  improvement_description: MyText
+  priority: 1
+  status: MyString
+  implemented_at: 2025-10-13 10:07:53

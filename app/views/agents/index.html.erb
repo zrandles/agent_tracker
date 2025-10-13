@@ -1,0 +1,65 @@
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+  <h1 style="font-size: 2em; margin-bottom: 20px;">All Agents (<%= @agents.count %>)</h1>
+
+  <%= link_to "← Back to Dashboard", root_path, style: "margin-bottom: 20px; display: inline-block;" %>
+
+  <div style="background: white; padding: 20px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px;">
+    <h3 style="margin-bottom: 15px;">Filters</h3>
+    <%= form_with url: agents_path, method: :get, local: true, style: "display: flex; gap: 15px; align-items: end;" do |f| %>
+      <div>
+        <%= label_tag :category, "Category:" %>
+        <%= select_tag :category, options_for_select(Agent::CATEGORIES.map { |c| [c.humanize, c] }, params[:category]),
+          { include_blank: "All" }, style: "padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+      </div>
+      <div>
+        <%= label_tag :tier, "Tier:" %>
+        <%= select_tag :tier, options_for_select(Agent::TIERS, params[:tier]),
+          { include_blank: "All" }, style: "padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+      </div>
+      <div>
+        <%= label_tag :status, "Status:" %>
+        <%= select_tag :status, options_for_select(Agent::STATUSES.map { |s| [s.humanize, s] }, params[:status]),
+          { include_blank: "All" }, style: "padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+      </div>
+      <%= submit_tag "Filter", style: "padding: 8px 20px; background: #2196f3; color: white; border: none; border-radius: 4px; cursor: pointer;" %>
+      <%= link_to "Clear", agents_path, style: "padding: 8px 20px; background: #757575; color: white; text-decoration: none; border-radius: 4px;" %>
+    <% end %>
+  </div>
+
+  <div style="background: white; border: 1px solid #ddd; border-radius: 8px;">
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr style="background: #f5f5f5; border-bottom: 2px solid #ddd;">
+          <th style="padding: 12px; text-align: left;">#</th>
+          <th style="padding: 12px; text-align: left;">Name</th>
+          <th style="padding: 12px; text-align: left;">Category</th>
+          <th style="padding: 12px; text-align: center;">Tier</th>
+          <th style="padding: 12px; text-align: center;">Status</th>
+          <th style="padding: 12px; text-align: center;">Invocations</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @agents.each do |agent| %>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px;"><%= agent.agent_number %></td>
+            <td style="padding: 12px;">
+              <%= link_to agent.name, agent_path(agent), style: "color: #2196f3; text-decoration: none;" %>
+            </td>
+            <td style="padding: 12px;"><%= agent.category.humanize %></td>
+            <td style="padding: 12px; text-align: center;">
+              <span style="background: <%= agent.tier_badge_color %>; color: white; padding: 4px 8px; border-radius: 3px; font-size: 0.9em;">
+                <%= agent.tier %>
+              </span>
+            </td>
+            <td style="padding: 12px; text-align: center;">
+              <span style="background: <%= agent.status_badge_color %>; color: white; padding: 4px 8px; border-radius: 3px; font-size: 0.9em;">
+                <%= agent.status.humanize %>
+              </span>
+            </td>
+            <td style="padding: 12px; text-align: center;"><%= agent.invocation_count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

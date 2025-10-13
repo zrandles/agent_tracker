@@ -1,0 +1,57 @@
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+  <h1 style="font-size: 2em; margin-bottom: 20px;">Agent Invocations</h1>
+
+  <%= link_to "← Back to Dashboard", root_path, style: "margin-right: 15px;" %>
+  <%= link_to "Quick Log", quick_log_path, style: "background: #4caf50; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px;" %>
+
+  <div style="background: white; border: 1px solid #ddd; border-radius: 8px; margin-top: 20px;">
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr style="background: #f5f5f5; border-bottom: 2px solid #ddd;">
+          <th style="padding: 12px; text-align: left;">Agent</th>
+          <th style="padding: 12px; text-align: left;">Task</th>
+          <th style="padding: 12px; text-align: center;">Mode</th>
+          <th style="padding: 12px; text-align: center;">Started</th>
+          <th style="padding: 12px; text-align: center;">Duration</th>
+          <th style="padding: 12px; text-align: center;">Success</th>
+          <th style="padding: 12px; text-align: center;">Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @invocations.each do |inv| %>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px;">
+              <%= link_to inv.agent.name, agent_path(inv.agent), style: "color: #2196f3; text-decoration: none;" %>
+            </td>
+            <td style="padding: 12px;">
+              <%= link_to truncate(inv.task_description, length: 60), agent_invocation_path(inv), style: "color: #2196f3; text-decoration: none;" %>
+            </td>
+            <td style="padding: 12px; text-align: center;">
+              <span style="background: <%= inv.mode_badge_color %>; color: white; padding: 4px 8px; border-radius: 3px; font-size: 0.9em;">
+                <%= inv.invocation_mode.humanize %>
+              </span>
+            </td>
+            <td style="padding: 12px; text-align: center; font-size: 0.9em;">
+              <%= inv.started_at.strftime("%b %d, %H:%M") %>
+            </td>
+            <td style="padding: 12px; text-align: center; font-size: 0.9em;">
+              <%= inv.duration_display %>
+            </td>
+            <td style="padding: 12px; text-align: center;">
+              <% if inv.success.nil? %>
+                <span style="color: #999;">—</span>
+              <% else %>
+                <span style="color: <%= inv.success ? 'green' : 'red' %>;">
+                  <%= inv.success ? '✓' : '✗' %>
+                </span>
+              <% end %>
+            </td>
+            <td style="padding: 12px; text-align: center; font-size: 0.9em;">
+              <%= inv.rating_stars %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

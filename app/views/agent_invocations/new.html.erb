@@ -1,0 +1,85 @@
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+  <h1 style="font-size: 2em; margin-bottom: 20px;">Quick Log Invocation</h1>
+
+  <%= link_to "← Back to Dashboard", root_path, style: "margin-bottom: 20px; display: inline-block;" %>
+
+  <%= form_with model: @invocation, url: agent_invocations_path, local: true, style: "background: white; padding: 30px; border: 1px solid #ddd; border-radius: 8px;" do |f| %>
+    <% if @invocation.errors.any? %>
+      <div style="background: #ffebee; border: 1px solid #ef5350; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+        <h3>Errors:</h3>
+        <ul>
+          <% @invocation.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div style="margin-bottom: 20px;">
+      <%= f.label :agent_id, "Agent", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+      <%= f.select :agent_id, options_from_collection_for_select(@agents, :id, :name, @invocation.agent_id),
+        { prompt: "Select an agent..." }, style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= f.label :task_description, "Task Description *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+      <%= f.text_area :task_description, rows: 3, style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;", placeholder: "What did the agent do?" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= f.label :invocation_mode, "Mode *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+      <%= f.select :invocation_mode, [["Manual", "manual"], ["Subagent", "subagent"]],
+        {}, style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= f.label :context_notes, "Context Notes", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+      <%= f.text_area :context_notes, rows: 2, style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+      <div>
+        <%= f.label :completed_at, "Completed At", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+        <%= f.datetime_local_field :completed_at, style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+      </div>
+
+      <div>
+        <%= f.label :satisfaction_rating, "Rating (1-5)", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+        <%= f.select :satisfaction_rating, (1..5).map { |n| [n, n] }, { include_blank: "Not rated" },
+          style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= f.label :success, "Success?", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+      <%= f.select :success, [["Yes", true], ["No", false], ["Unknown", nil]], { include_blank: true },
+        style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= f.label :outcome_notes, "Outcome Notes", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+      <%= f.text_area :outcome_notes, rows: 2, style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+      <div>
+        <%= f.label :tokens_input, "Tokens In", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+        <%= f.number_field :tokens_input, style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+      </div>
+      <div>
+        <%= f.label :tokens_output, "Tokens Out", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+        <%= f.number_field :tokens_output, style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+      </div>
+      <div>
+        <%= f.label :tokens_total, "Tokens Total", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+        <%= f.number_field :tokens_total, style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+      </div>
+    </div>
+
+    <%= f.hidden_field :started_at, value: Time.current %>
+
+    <div style="text-align: center;">
+      <%= f.submit "Log Invocation", style: "background: #4caf50; color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 1.1em; cursor: pointer;" %>
+    </div>
+  <% end %>
+</div>

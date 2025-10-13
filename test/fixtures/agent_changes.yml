@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  agent: one
+  change_type: MyString
+  change_description: MyText
+  before_value: MyText
+  after_value: MyText
+  triggered_by: MyString
+  agent_invocation: one
+  agent_issue: one
+  agent_improvement: one
+
+two:
+  agent: two
+  change_type: MyString
+  change_description: MyText
+  before_value: MyText
+  after_value: MyText
+  triggered_by: MyString
+  agent_invocation: two
+  agent_issue: two
+  agent_improvement: two

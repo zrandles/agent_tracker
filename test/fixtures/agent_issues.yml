@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  agent: one
+  agent_invocation: one
+  issue_description: MyText
+  severity: 1
+  status: MyString
+  resolution_notes: MyText
+
+two:
+  agent: two
+  agent_invocation: two
+  issue_description: MyText
+  severity: 1
+  status: MyString
+  resolution_notes: MyText
