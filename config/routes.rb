@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     # Quick log form shortcut
     get '/quick_log', to: 'agent_invocations#new', as: :quick_log
 
-    # API endpoints (no /agent_tracker scope - at root level)
+    # API endpoints (scoped under /agent_tracker)
     namespace :api do
       resources :agent_invocations, only: [] do
         collection do
