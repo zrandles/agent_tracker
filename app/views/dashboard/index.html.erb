@@ -56,6 +56,7 @@
       <% @recent_invocations.each do |inv| %>
         <div style="margin-bottom: 10px; font-size: 0.9em;">
           <%= link_to inv.agent.name, agent_invocation_path(inv) %> -
+          <%= inv.task_description %> -
           <%= inv.started_at.strftime("%b %d, %H:%M") %> -
           <span style="color: <%= inv.success ? 'green' : 'red' %>"><%= inv.success_label %></span>
         </div>

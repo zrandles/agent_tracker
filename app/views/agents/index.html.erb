@@ -8,18 +8,18 @@
     <%= form_with url: agents_path, method: :get, local: true, style: "display: flex; gap: 15px; align-items: end;" do |f| %>
       <div>
         <%= label_tag :category, "Category:" %>
-        <%= select_tag :category, options_for_select(Agent::CATEGORIES.map { |c| [c.humanize, c] }, params[:category]),
-          { include_blank: "All" }, style: "padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+        <%= select_tag :category, options_for_select([["All", ""]] + Agent::CATEGORIES.map { |c| [c.humanize, c] }, params[:category]),
+          style: "padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
       </div>
       <div>
         <%= label_tag :tier, "Tier:" %>
-        <%= select_tag :tier, options_for_select(Agent::TIERS, params[:tier]),
-          { include_blank: "All" }, style: "padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+        <%= select_tag :tier, options_for_select([["All", ""]] + Agent::TIERS.map { |t| [t, t] }, params[:tier]),
+          style: "padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
       </div>
       <div>
         <%= label_tag :status, "Status:" %>
-        <%= select_tag :status, options_for_select(Agent::STATUSES.map { |s| [s.humanize, s] }, params[:status]),
-          { include_blank: "All" }, style: "padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+        <%= select_tag :status, options_for_select([["All", ""]] + Agent::STATUSES.map { |s| [s.humanize, s] }, params[:status]),
+          style: "padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
       </div>
       <%= submit_tag "Filter", style: "padding: 8px 20px; background: #2196f3; color: white; border: none; border-radius: 4px; cursor: pointer;" %>
       <%= link_to "Clear", agents_path, style: "padding: 8px 20px; background: #757575; color: white; text-decoration: none; border-radius: 4px;" %>
