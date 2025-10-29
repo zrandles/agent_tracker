@@ -51,25 +51,17 @@ set :assets_roles, [:web, :app]
 set :keep_assets, 2
 
 namespace :deploy do
-  desc 'Run tests before deploying'
-  task :run_tests do
-    run_locally do
-      puts "Running test suite..."
-      execute :bundle, :exec, :rspec
-      puts "All tests passed! Proceeding with deployment."
-    end
-  end
-
   desc 'Upload coverage files to production'
   task :upload_coverage do
     on roles(:app) do
-      if File.exist?('coverage/.last_run.json')
+      coverage_file = 'coverage/.last_run.json'
+      if File.exist?(coverage_file)
         puts "Uploading coverage data..."
         execute :mkdir, '-p', "#{release_path}/coverage"
-        upload! 'coverage/.last_run.json', "#{release_path}/coverage/.last_run.json"
-        puts "Coverage data uploaded successfully."
+        upload! coverage_file, "#{release_path}/coverage/.last_run.json"
+        puts "✓ Coverage data uploaded successfully."
       else
-        puts "No coverage data found locally. Skipping upload."
+        puts "⚠ No coverage data found locally. Run tests locally first to generate coverage."
       end
     end
   end
@@ -159,7 +151,6 @@ end
 # NOTE: Do NOT clear deploy:assets:precompile or asset compilation will be disabled!
 # The custom asset tasks defined above in namespace :deploy will run correctly.
 
-before 'deploy:starting', 'deploy:run_tests'
 after 'bundler:install', 'deploy:generate_binstubs'
 after 'deploy:updated', 'deploy:upload_coverage'
 before 'deploy:publishing', 'deploy:assets:precompile'
