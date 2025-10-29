@@ -60,6 +60,20 @@ namespace :deploy do
     end
   end
 
+  desc 'Upload coverage files to production'
+  task :upload_coverage do
+    on roles(:app) do
+      if File.exist?('coverage/.last_run.json')
+        puts "Uploading coverage data..."
+        execute :mkdir, '-p', "#{release_path}/coverage"
+        upload! 'coverage/.last_run.json', "#{release_path}/coverage/.last_run.json"
+        puts "Coverage data uploaded successfully."
+      else
+        puts "No coverage data found locally. Skipping upload."
+      end
+    end
+  end
+
   desc 'Restart Puma server'
   task :restart_puma_sudo do
     on roles(:app) do
@@ -145,9 +159,9 @@ end
 # NOTE: Do NOT clear deploy:assets:precompile or asset compilation will be disabled!
 # The custom asset tasks defined above in namespace :deploy will run correctly.
 
-# Temporarily disabled - no tests in this app yet
-# before 'deploy:starting', 'deploy:run_tests'
+before 'deploy:starting', 'deploy:run_tests'
 after 'bundler:install', 'deploy:generate_binstubs'
+after 'deploy:updated', 'deploy:upload_coverage'
 before 'deploy:publishing', 'deploy:assets:precompile'
 after 'deploy:publishing', 'deploy:restart'
 after 'deploy:publishing', 'deploy:restart_puma_sudo'
