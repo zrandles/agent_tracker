@@ -13,6 +13,9 @@ Rails.application.routes.draw do
 
     # API endpoints (scoped under /agent_tracker)
     namespace :api do
+      # Business metrics for app_monitor
+      resource :metrics, only: [:show]
+
       resources :agent_invocations, only: [] do
         collection do
           post :bulk_create
